@@ -16,7 +16,7 @@ face_mesh = mp_face_mesh.FaceMesh(
 
 # Create a directory for saving images if it doesn't exist
 save_directory = "C:\\TA\\trainCNN\\30cm"
-sKelas = "Kanan"
+sKelas = "Stop"
 if not os.path.exists(save_directory):
     os.makedirs(save_directory)
 
@@ -35,8 +35,8 @@ while cap.isOpened():
     success, image = cap.read()
     if not success:
         print("Ignoring empty camera frame.")
-        # continue # Original code
-        exit()
+        continue # Original code
+        # exit()
 
     # Calculate FPS
     current_time = time.time()
@@ -90,24 +90,25 @@ while cap.isOpened():
             # Crop the combined eye region from the black background image
             combined_eye_image = black_image[combined_y_min:combined_y_max, combined_x_min:combined_x_max]
             
-            # Save the image
-            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S_%f')
-            filename = f"{timestamp}.jpg"
-            combined_eye_path = os.path.join(save_directory, sKelas, filename)
-            # cv2.imwrite(combined_eye_path, combined_eye_image) # Original Code
             
-            
-            print(f"Cropped image saved at: {combined_eye_path}")
-            
-            # Optionally display the cropped combined eye image (for testing)
             try:
+                # Save the imageq
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S_%f')
+                filename = f"{timestamp}.jpg"
+                combined_eye_path = os.path.join(save_directory, sKelas, filename)
+                cv2.imwrite(combined_eye_path, combined_eye_image) # Original Code
+
+
+                print(f"Cropped image saved at: {combined_eye_path}")
+                
+                # Optionally display the cropped combined eye image (for testing)
                 cv2.imshow('Combined Eyes', combined_eye_image)
 
             except cv2.error as e:
                 print("Eyes not found")
 
         # Put FPS text on the frame
-        cv2.putText(image, fps_text, (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        # cv2.putText(image, fps_text, (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
     
     # Break the loop on 'q' key press
     key = cv2.waitKey(1)
